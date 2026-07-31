@@ -1,14 +1,14 @@
-const siteUrl = "https://your-url.com";
+const siteUrl = "https://metis.sabara.com";
 
 const contacts = {
-  "mail": "your-email@domain.com",
-  "repo": "#",
+  "mail": "gabriel@lts.app.br",
+  "repo": "https://github.com/gabriersdev/metis-website",
 }
 
 const appConfigs = {
-  "app-name": "The Journal",
-  "app-name-slug": "the-journal",
-  "title": "The Journal - Pensamentos, histórias e ideias",
+  "app-name": "Metis",
+  "app-name-slug": "metis-website",
+  "title": "Metis - Pensamentos, histórias e ideias",
   "description": "As últimas edições, histórias e ideias do The Journal.",
   
   "locale": "pt-BR",

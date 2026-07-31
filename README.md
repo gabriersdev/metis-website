@@ -1,4 +1,4 @@
-# Journal Template
+# METIS Website - a Journal Template
 
 This project is a blog or journal template, based on the "Journal" theme for the Ghost platform.
 
