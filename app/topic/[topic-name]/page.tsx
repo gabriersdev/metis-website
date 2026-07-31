@@ -62,8 +62,8 @@ export default async function TopicPage({params}: Props) {
           {/* Main Content Area */}
           <div className="w-full lg:flex-1 lg:pr-16">
             <PageHeading
-              title={`Topic: ${formattedTopic}`}
-              description={`${posts.length || "No"} ${posts.length === 1 ? 'post' : 'posts'} found`}
+              title={`Tópico: ${formattedTopic}`}
+              description={`${posts.length || "Nenhum"} ${posts.length > 1 ? 'posts encontrados' : 'post encontrado'}`}
             />
             
             {posts.length > 0 ? (

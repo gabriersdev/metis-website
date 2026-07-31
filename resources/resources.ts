@@ -8,8 +8,8 @@ const contacts = {
 const appConfigs = {
   "app-name": "The Journal",
   "app-name-slug": "the-journal",
-  "title": "The Journal - Thoughts, stories and ideas",
-  "description": "The latest issues, stories, and ideas from The Journal.",
+  "title": "The Journal - Pensamentos, histórias e ideias",
+  "description": "As últimas edições, histórias e ideias do The Journal.",
   
   "locale": "pt-BR",
   "timezone": "America/Sao_Paulo",

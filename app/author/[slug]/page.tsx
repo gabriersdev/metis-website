@@ -14,7 +14,7 @@ export async function generateMetadata({params}: { params: Promise<{ slug: strin
   const resolvedParams = await params;
   const author = getAuthorBySlug(resolvedParams.slug);
   if (!author) {
-    return {title: 'Author Not Found'};
+    return {title: 'Autor não encontrado'};
   }
   return {
     title: `${author.name} | ${appConfigs["app-name"]}`,
@@ -52,7 +52,7 @@ export default async function AuthorPage({params}: { params: Promise<{ slug: str
           <div className="w-full lg:flex-1 lg:pr-16">
             <PageHeading
               title={`Posts by ${author.name}`}
-              description={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'} published`}
+              description={`${posts.length} ${posts.length > 1 ? 'posts publicados' : 'post publicado'}`}
             />
             
             {posts.length > 0 ? (
@@ -62,7 +62,7 @@ export default async function AuthorPage({params}: { params: Promise<{ slug: str
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500">No posts found for this author.</p>
+              <p className="text-gray-500">Nenhum post encontrado para este autor.</p>
             )}
           </div>
           

@@ -24,7 +24,8 @@ export async function generateMetadata({params}: PageProps) {
   
   if (!post) {
     return {
-      title: `Post Not Found - ${appConfigs["app-name"]}`,
+      title: `Post não encontrado - ${appConfigs["app-name"]}`,
+      // TODO - traduzir descrições das páginas que são definidas estaticamente no próprio componente
       description: 'The requested post could not be found.',
     };
   }
