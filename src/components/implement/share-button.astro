@@ -1,0 +1,67 @@
+---
+interface Props {
+  title: string;
+}
+const { title } = Astro.props;
+---
+
+<share-button data-title={title}>
+  <button
+    id="btn-share"
+    class="px-4 py-2 border border-gray-300 hover:border-gray-400 rounded-full font-semibold transition-colors flex items-center justify-center min-w-[100px]"
+  >
+    <span class="text-default">Share</span>
+    <span class="text-copied hidden">Copied!</span>
+  </button>
+</share-button>
+
+<script>
+  class ShareButton extends HTMLElement {
+    constructor() {
+      super();
+      const title = this.dataset.title || '';
+      const btn = this.querySelector('#btn-share');
+      const textDefault = this.querySelector('.text-default');
+      const textCopied = this.querySelector('.text-copied');
+
+      if (btn) {
+        btn.addEventListener('click', async () => {
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: title,
+                url: window.location.href,
+              });
+              return;
+            } catch (err) {
+              console.error('Error sharing:', err);
+            }
+          }
+
+          try {
+            await navigator.clipboard.writeText(window.location.href);
+            
+            // UI Update for copied state
+            btn.classList.remove('border-gray-300', 'hover:border-gray-400');
+            btn.classList.add('bg-green-300', 'border-green-300', 'text-green-800', 'pointer-events-none');
+            
+            textDefault?.classList.add('hidden');
+            textCopied?.classList.remove('hidden');
+
+            setTimeout(() => {
+              btn.classList.add('border-gray-300', 'hover:border-gray-400');
+              btn.classList.remove('bg-green-300', 'border-green-300', 'text-green-800', 'pointer-events-none');
+              
+              textDefault?.classList.remove('hidden');
+              textCopied?.classList.add('hidden');
+            }, 2000);
+          } catch (err) {
+            console.error('Failed to copy', err);
+          }
+        });
+      }
+    }
+  }
+
+  customElements.define('share-button', ShareButton);
+</script>
