@@ -14,14 +14,14 @@ export interface SiteConfig {
   // og:locale value (e.g. 'en_US'). Defaults to a locale derived from `lang`
   // when omitted.
   ogLocale?: string;
-
+  
   // Theme settings
   theme: {
     accentColor: string;
     defaultColorMode: 'light' | 'dark' | 'system';
     showThemeToggle: boolean;
   };
-
+  
   // Navigation
   nav: {
     main: Array<{
@@ -29,7 +29,7 @@ export interface SiteConfig {
       href: string;
     }>;
   };
-
+  
   // Features toggle
   features: {
     blog: boolean;
@@ -39,7 +39,7 @@ export interface SiteConfig {
     sitemap: boolean;
     search: boolean;
   };
-
+  
   // Social links
   social: {
     github?: string;
@@ -48,7 +48,7 @@ export interface SiteConfig {
     instagram?: string;
     youtube?: string;
   };
-
+  
   // Blog settings
   blog: {
     postsPerPage: number;
@@ -57,14 +57,14 @@ export interface SiteConfig {
     showShareButtons: boolean;
     showRelatedPosts: boolean;
   };
-
+  
   // Portfolio settings
   portfolio: {
     projectsPerPage: number;
     showTechStack: boolean;
     showYear: boolean;
   };
-
+  
   // Footer settings
   footer: {
     links: Array<{
@@ -82,25 +82,24 @@ const siteConfig: SiteConfig = {
   url: 'https://kpab.github.io/astro-haze',
   ogImage: '/og-image.png',
   twitterHandle: '@yourusername',
-  lang: 'en',
-  ogLocale: 'en_US',
-
+  lang: 'pt-br',
+  ogLocale: 'pt-br',
+  
   theme: {
     accentColor: 'hsl(280, 70%, 60%)',
     defaultColorMode: 'system',
-    showThemeToggle: true,
+    showThemeToggle: false,
   },
-
+  
   nav: {
     main: [
-      { name: 'Home', href: '/' },
-      { name: 'Blog', href: '/blog/' },
-      { name: 'Portfolio', href: '/work/' },
-      { name: 'Landing', href: '/landing/' },
-      { name: 'About', href: '/about/' },
+      {name: 'Home', href: '/'},
+      {name: 'Blog', href: '/blog/'},
+      {name: 'Portfolio', href: '/work/'},
+      {name: 'About', href: '/about/'},
     ],
   },
-
+  
   features: {
     blog: true,
     portfolio: true,
@@ -109,13 +108,13 @@ const siteConfig: SiteConfig = {
     sitemap: true,
     search: true,
   },
-
+  
   social: {
     github: 'https://github.com/yourusername',
     twitter: 'https://twitter.com/yourusername',
     linkedin: 'https://linkedin.com/in/yourusername',
   },
-
+  
   blog: {
     postsPerPage: 6,
     showToc: true,
@@ -123,19 +122,20 @@ const siteConfig: SiteConfig = {
     showShareButtons: true,
     showRelatedPosts: true,
   },
-
+  
   portfolio: {
     projectsPerPage: 9,
     showTechStack: true,
     showYear: true,
   },
-
+  
   footer: {
     // Privacy/Terms are intentionally omitted by default — this theme ships
     // without those pages, so add them here only once the pages exist.
     links: [
-      { name: 'Sitemap', href: '/sitemap-index.xml' },
-      { name: 'RSS', href: '/rss.xml' },
+      {name: 'Instagram', href: '#0'},
+      {name: 'Sitemap', href: '/sitemap-index.xml'},
+      {name: 'RSS', href: '/rss.xml'},
     ],
   },
 };

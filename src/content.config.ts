@@ -1,13 +1,13 @@
-import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
-import { z } from 'zod';
+import {defineCollection} from 'astro:content';
+import {glob} from 'astro/loaders';
+import {z} from 'zod';
 
 // Blog collection — Markdown content via the Content Layer glob loader.
 // `image()` runs hero images through astro:assets (AVIF/WebP + responsive
 // srcset). Frontmatter paths are resolved relative to the Markdown file.
 const blog = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
-  schema: ({ image }) =>
+  loader: glob({pattern: '**/*.{md,mdx}', base: './src/content/blog'}),
+  schema: ({image}) =>
     z.object({
       title: z.string(),
       description: z.string(),
@@ -25,8 +25,8 @@ const blog = defineCollection({
 // Portfolio / Projects collection — Markdown content. Cover and gallery
 // images go through astro:assets via `image()`.
 const projects = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
-  schema: ({ image }) =>
+  loader: glob({pattern: '**/*.{md,mdx}', base: './src/content/projects'}),
+  schema: ({image}) =>
     z.object({
       title: z.string(),
       summary: z.string(),
@@ -62,8 +62,8 @@ const landing = defineCollection({
       subtitle: z.string(),
       description: z.string(),
       cta: z.object({
-        primary: z.object({ text: z.string(), href: z.string() }),
-        secondary: z.object({ text: z.string(), href: z.string() }).optional(),
+        primary: z.object({text: z.string(), href: z.string()}),
+        secondary: z.object({text: z.string(), href: z.string()}).optional(),
       }),
       image: z.string().optional(),
     }),
@@ -95,7 +95,7 @@ const landing = defineCollection({
           description: z.string(),
           features: z.array(z.string()),
           highlighted: z.boolean().default(false),
-          cta: z.object({ text: z.string(), href: z.string() }),
+          cta: z.object({text: z.string(), href: z.string()}),
         }),
       )
       .optional(),
@@ -121,16 +121,16 @@ const landing = defineCollection({
       )
       .optional(),
     faq: z
-      .array(z.object({ question: z.string(), answer: z.string() }))
+      .array(z.object({question: z.string(), answer: z.string()}))
       .optional(),
     finalCta: z
       .object({
         title: z.string(),
         description: z.string(),
-        button: z.object({ text: z.string(), href: z.string() }),
+        button: z.object({text: z.string(), href: z.string()}),
       })
       .optional(),
   }),
 });
 
-export const collections = { blog, projects, landing };
+export const collections = {blog, projects, landing};
