@@ -9,22 +9,23 @@ import GlassCard from '@/components/ui/GlassCard.astro';
 import Section from '@/components/ui/Section.astro';
 import siteConfig from '@/site.config';
 import {withBase} from '@/lib/url';
+import { dictionary } from '../../resources/dictionary';
 
 const formats = [
   {
     number: '01',
-    label: 'Publish',
-    title: 'A journal with editorial rhythm.',
+    label: 'Publicar',
+    title: 'Um jornal com ritmo editorial.',
     description:
-      'Long-form writing, tags, reading metadata, and thoughtful article layouts give ideas enough room to develop.',
+      'Escrita longa, tags, metadados de leitura e layouts de artigos bem pensados dão espaço suficiente para as ideias se desenvolverem.',
     href: '/blog/',
   },
   {
     number: '02',
-    label: 'Present',
-    title: 'A portfolio that shows the thinking.',
+    label: 'Apresentar',
+    title: 'Um portfólio que mostra o pensamento.',
     description:
-      'Project collections turn outcomes, process, roles, and technical decisions into clear, navigable case studies.',
+      'As coleções de projetos transformam resultados, processos, papéis e decisões técnicas em estudos de caso claros e navegáveis.',
     href: '/work/',
   },
 ];
@@ -33,38 +34,38 @@ const stack = [
   {
     name: 'Astro 7',
     category: 'Framework',
-    detail: 'Static-first rendering with a deliberately small browser runtime.',
+    detail: 'Renderização focada no estático com um runtime de navegador deliberadamente pequeno.',
   },
   {
-    name: 'Content Layer',
-    category: 'Content',
+    name: 'Camada de Conteúdo',
+    category: 'Conteúdo',
     detail:
-      'Typed, validated collections for articles, projects, and campaign data.',
+      'Coleções tipadas e validadas para artigos, projetos e dados de campanha.',
   },
   {
     name: 'Sätteri',
     category: 'Markdown',
     detail:
-      'Astro’s modern Markdown pipeline for dependable authoring and output.',
+      'Pipeline Markdown moderno do Astro para autoria e saída confiáveis.',
   },
   {
-    name: 'Glass system',
+    name: 'Sistema de Vidro',
     category: 'Interface',
     detail:
-      'Focused translucent surfaces, restrained depth, and solid fallbacks.',
+      'Superfícies translúcidas focadas, profundidade restrita e alternativas sólidas.',
   },
   {
-    name: 'Accessible by design',
-    category: 'Foundation',
+    name: 'Acessível desde a concepção',
+    category: 'Fundação',
     detail:
-      'Semantic structure, visible focus, native controls, and preference-aware motion.',
+      'Estrutura semântica, foco visível, controles nativos e animações cientes das preferências do usuário.',
   },
 ];
 ---
 
 <BaseLayout
-  title="About"
-  description={`${siteConfig.name} is a modular Astro 7 theme for publishing stories, projects, and focused landing pages.`}
+  title={dictionary.pages.about.title}
+  description={dictionary.pages.about.description}
 >
   <Header/>
   
@@ -78,24 +79,24 @@ const stack = [
           className="about-hero__panel"
         >
           <div class="about-hero__meta">
-            <span>About the system</span>
-            <span>Open source · Astro 7</span>
+            <span>Sobre o sistema</span>
+            <span>Código aberto · Astro 7</span>
           </div>
           
           <div class="about-hero__body">
             <div class="about-hero__title">
-              <p>Designed by {siteConfig.author}</p>
-              <h1>A quiet framework for expressive work.</h1>
+              <p>Criado por {siteConfig.author}</p>
+              <h1>Um framework tranquilo para trabalhos expressivos.</h1>
             </div>
             <div class="about-hero__statement">
               <p>
-                {siteConfig.name} is a multi-purpose theme built around one belief:
-                strong structure should make creative choices easier, not narrower.
+                {siteConfig.name} é um tema multi-propósito construído em torno de uma crença:
+                uma estrutura forte deve tornar as escolhas criativas mais fáceis, não mais limitadas.
               </p>
               <p>
-                It combines editorial hierarchy, typed content, accessible
-                interaction, and carefully limited glass effects into a
-                foundation meant to be changed.
+                Ele combina hierarquia editorial, conteúdo tipado, interação
+                acessível e efeitos de vidro cuidadosamente limitados em uma
+                base feita para ser modificada.
               </p>
             </div>
           </div>
@@ -111,12 +112,12 @@ const stack = [
                     variant="solid"
                     size="lg"
                   >
-                    View on GitHub <span aria-hidden="true">↗</span>
+                    Ver no GitHub <span aria-hidden="true">↗</span>
                   </Button>
                 )
               }
               <Button href={withBase('/landing/')} variant="outline" size="lg"
-              >See the live demo
+              >Ver demonstração
               </Button
               >
             </div>
@@ -126,9 +127,9 @@ const stack = [
     </section>
     
     <Section
-      eyebrow="One system, three formats"
-      title="Built around what you need to say."
-      subtitle="Start with a complete publishing model, then remove, reorder, and restyle until it belongs to the work."
+      eyebrow="Um sistema, três formatos"
+      title="Construído em torno do que você precisa dizer."
+      subtitle="Comece com um modelo de publicação completo, depois remova, reordene e reestilize até que pertença ao trabalho."
       align="left"
       container="xl"
     >
@@ -148,7 +149,7 @@ const stack = [
               <h2>{format.title}</h2>
               <p>{format.description}</p>
               <span class="format-card__link">
-                Explore format <i aria-hidden="true">↗</i>
+                Explorar o formato <i aria-hidden="true">↗</i>
               </span>
             </GlassCard>
           ))
@@ -158,16 +159,16 @@ const stack = [
     
     <section class="principle">
       <Container size="xl">
-        <p class="principle__index">The principle / 04</p>
+        <p class="principle__index">O princípio / 04</p>
         <blockquote>
-          Atmosphere should support the content,
-          <span>never compete with it.</span>
+          A atmosfera deve dar suporte ao conteúdo,
+          <span>nunca competir com ele.</span>
         </blockquote>
         <div class="principle__note">
           <span class="principle__mark" aria-hidden="true">✦</span>
           <p>
-            Glass appears only where it clarifies grouping or depth. Everywhere
-            else, type, spacing, and borders do the quieter work.
+            O vidro aparece apenas onde esclarece agrupamento ou profundidade. Em todo o resto,
+            a tipografia, o espaçamento e as bordas fazem o trabalho mais silencioso.
           </p>
         </div>
       </Container>
@@ -175,9 +176,9 @@ const stack = [
     
     <Section
       id="stack"
-      eyebrow="Under the surface"
-      title="A modern, legible stack."
-      subtitle="The implementation favors platform features and durable conventions over client-side machinery."
+      eyebrow="Abaixo da superfície"
+      title="Uma stack moderna e legível."
+      subtitle="A implementação favorece recursos nativos e convenções duráveis em vez de depender fortemente de processamento do lado do cliente."
       align="left"
       container="xl"
     >
@@ -200,13 +201,13 @@ const stack = [
     <section class="about-cta">
       <Container size="xl">
         <div class="about-cta__copy">
-          <p>Fork the foundation</p>
-          <h2>Make the haze your own.</h2>
+          <p>Faça um fork da fundação</p>
+          <h2>Torne a atmosfera sua.</h2>
         </div>
         <div class="about-cta__aside">
           <p>
-            Use the theme as a starting point for your next publication,
-            portfolio, or campaign—then shape the system around your own voice.
+            Use o tema como ponto de partida para sua próxima publicação,
+            portfólio ou campanha—depois molde o sistema em torno da sua própria voz.
           </p>
           <div>
             {
@@ -217,7 +218,7 @@ const stack = [
                   variant="solid"
                   size="lg"
                 >
-                  Get the source <span aria-hidden="true">↗</span>
+                  Obter o código <span aria-hidden="true">↗</span>
                 </Button>
               )
             }
@@ -229,7 +230,7 @@ const stack = [
                   variant="outline"
                   size="lg"
                 >
-                  Follow updates
+                  Siga as atualizações
                 </Button>
               )
             }

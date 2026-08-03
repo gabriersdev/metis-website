@@ -67,5 +67,23 @@ export const dictionary = {
     readArticle: "Leia o artigo que encontrei:",
     shareOn: "Compartilhar no",
     shareLink: "Compartilhar link",
-  }
+  },
+  pages: {
+    index: {
+      title: "Um sistema, três formas de publicar",
+      description: "Um tema Astro pronto para produção para blogs editoriais, portfólios e páginas de destino focadas.",
+    },
+    about: {
+      title: "Sobre",
+      description: "Astro Haze é um tema modular Astro 7 para publicar histórias, projetos e páginas de destino focadas.",
+    },
+    blog: {
+      title: "Blog",
+      description: "Ideias, tutoriais e atualizações do blog Astro Haze",
+    },
+    work: {
+      title: "Trabalho",
+      description: "Trabalho selecionado de produto, marca e experiência digital do Astro Haze.",
+    },
+  },
 };

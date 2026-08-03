@@ -8,6 +8,7 @@ import PostGrid from '@/components/blog/PostGrid.astro';
 import Pagination from '@/components/blog/Pagination.astro';
 import { getPublishedPosts, splitFeatured, type Post } from '@/lib/posts';
 import siteConfig from '@/site.config';
+import { dictionary } from '../../../../resources/dictionary';
 
 export const getStaticPaths = (async () => {
   const allPosts = await getPublishedPosts();
@@ -44,15 +45,15 @@ const { posts, currentPage, totalPages } = Astro.props;
 ---
 
 <BaseLayout
-  title={`Blog — Page ${currentPage}`}
-  description="Insights, tutorials, and updates from the Astro Haze blog"
+  title={`${dictionary.pages.blog.title} — Página ${currentPage}`}
+  description={dictionary.pages.blog.description}
 >
   <Header />
 
   <main id="main" tabindex="-1" class="main-content">
     <section class="section">
       <Container>
-        <h2 class="section-title">All Posts</h2>
+        <h2 class="section-title">Todas as postagens</h2>
         <PostGrid posts={posts} />
         <Pagination
           currentPage={currentPage}

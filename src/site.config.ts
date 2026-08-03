@@ -76,8 +76,8 @@ export interface SiteConfig {
 
 const siteConfig: SiteConfig = {
   name: 'Astro Haze',
-  title: 'Astro Haze - Glassmorphism Theme',
-  description: 'A beautiful glassmorphism multi-purpose theme for Astro 7',
+  title: 'Astro Haze - Tema Glassmorphism',
+  description: 'Um belo tema multi-propósito com glassmorphism para Astro 7',
   author: 'Your Name',
   url: 'https://kpab.github.io/astro-haze',
   ogImage: '/og-image.png',
@@ -93,10 +93,10 @@ const siteConfig: SiteConfig = {
   
   nav: {
     main: [
-      {name: 'Home', href: '/'},
+      {name: 'Início', href: '/'},
       {name: 'Blog', href: '/blog/'},
-      {name: 'Portfolio', href: '/work/'},
-      {name: 'About', href: '/about/'},
+      {name: 'Portfólio', href: '/work/'},
+      {name: 'Sobre', href: '/about/'},
     ],
   },
   
@@ -134,7 +134,7 @@ const siteConfig: SiteConfig = {
     // without those pages, so add them here only once the pages exist.
     links: [
       {name: 'Instagram', href: '#0'},
-      {name: 'Sitemap', href: '/sitemap-index.xml'},
+      {name: 'Mapa do site', href: '/sitemap-index.xml'},
       {name: 'RSS', href: '/rss.xml'},
     ],
   },

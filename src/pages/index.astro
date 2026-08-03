@@ -9,34 +9,35 @@ import Button from '@/components/ui/Button.astro';
 import Container from '@/components/ui/Container.astro';
 import GlassCard from '@/components/ui/GlassCard.astro';
 import Section from '@/components/ui/Section.astro';
+import { dictionary } from '../../resources/dictionary';
 
 const showcases = [
   {
     index: '01',
     type: 'Editorial',
-    title: 'Ideas with a place to unfold.',
+    title: 'Ideias com espaço para se desenvolverem.',
     description:
-      'A reading-first blog system with strong rhythm, calm metadata, and focused article pages.',
+      'Um sistema de blog focado em leitura com ritmo forte, metadados calmos e páginas de artigo focadas.',
     href: '/blog/',
-    cta: 'Enter the journal',
+    cta: 'Entrar no jornal',
     className: 'showcase--journal',
   },
   {
     index: '02',
-    type: 'Selected work',
-    title: 'Case studies that show the thinking.',
+    type: 'Trabalho selecionado',
+    title: 'Estudos de caso que mostram o pensamento.',
     description:
-      'A portfolio structure for outcomes, process, roles, and the details behind the final frame.',
+      'Uma estrutura de portfólio para resultados, processos, papéis e os detalhes por trás do quadro final.',
     href: '/work/',
-    cta: 'Browse selected work',
+    cta: 'Procurar trabalho selecionado',
     className: 'showcase--work',
   },
 ];
 ---
 
 <BaseLayout
-  title="One system, three ways to publish"
-  description="A production-ready Astro theme for editorial blogs, portfolios, and focused landing pages."
+  title={dictionary.pages.index.title}
+  description={dictionary.pages.index.description}
 >
   <Header/>
   
@@ -44,22 +45,20 @@ const showcases = [
     <section class="home-hero">
       <Container size="xl">
         <div class="home-hero__meta">
-          <span>Astro 7 theme system</span>
-          <span>Edition 2026</span>
+          <span>Sistema de tema Astro 7</span>
+          <span>Edição 2026</span>
         </div>
         <h1>
-          One atmosphere.<br/>
-          <span>Three ways to publish.</span>
+          Uma atmosfera.<br/>
+          <span>Três formas de publicar.</span>
         </h1>
         <div class="home-hero__footer">
           <p>
-            Astro Haze is a modular showcase for thoughtful writing, selected
-            work, and focused campaigns—fast by default and expressive where it
-            counts.
+            Astro Haze é um mostruário modular para escrita cuidadosa, trabalho selecionado e campanhas focadas — rápido por padrão e expressivo onde é preciso.
           </p>
           <div class="home-hero__actions">
             <Button href="#showcase" variant="solid" size="lg"
-            >Explore the system
+            >Explore o sistema
             </Button
             >
             {
@@ -70,23 +69,23 @@ const showcases = [
                   variant="outline"
                   size="lg"
                 >
-                  View source <span aria-hidden="true">↗</span>
+                  Ver código <span aria-hidden="true">↗</span>
                 </Button>
               )
             }
           </div>
         </div>
         <div class="home-hero__orbit" aria-hidden="true">
-          <span>Write</span><span>Show</span><span>Launch</span>
+          <span>Escrever</span><span>Mostrar</span><span>Lançar</span>
         </div>
       </Container>
     </section>
     
     <Section
       id="showcase"
-      eyebrow="Choose your canvas"
-      title="Three complete starting points."
-      subtitle="Each preview shares the same accessible foundation while keeping its own pace, hierarchy, and purpose."
+      eyebrow="Escolha sua tela"
+      title="Três pontos de partida completos."
+      subtitle="Cada visualização compartilha a mesma base acessível, mantendo seu próprio ritmo, hierarquia e propósito."
       align="left"
       container="xl"
     >
@@ -113,15 +112,14 @@ const showcases = [
                   <div class="preview preview--journal">
                     <div class="preview__nav">
                       <i/>
-                      <span>FIELD / NOTES</span>
-                      <small>ISSUE 04</small>
+                      <span>CAMPO / NOTAS</span>
+                      <small>EDIÇÃO 04</small>
                     </div>
                     <div class="preview__editorial">
-                      <span>Design practice</span>
-                      <h3>Making space for the useful.</h3>
+                      <span>Prática de design</span>
+                      <h3>Dando espaço para o útil.</h3>
                       <p>
-                        On restraint, rhythm, and the objects that earn a
-                        permanent place.
+                        Sobre contenção, ritmo e os objetos que ganham um lugar permanente.
                       </p>
                     </div>
                     <div class="preview__lines">
@@ -137,27 +135,27 @@ const showcases = [
                       <span>H / 02</span>
                       <div class="preview__shape"/>
                       <strong>
-                        Common
+                        Terreno
                         <br/>
-                        Ground
+                        Comum
                       </strong>
                     </div>
                     <div class="preview__caption">
-                      <span>Brand system</span>
+                      <span>Sistema de marca</span>
                       <span>2026 ↗</span>
                     </div>
                   </div>
                 )}
                 {item.index === '03' && (
                   <div class="preview preview--landing">
-                    <span class="preview__edition">EDITION 01</span>
+                    <span class="preview__edition">EDIÇÃO 01</span>
                     <div class="preview__object" aria-hidden="true"/>
                     <h3>
-                      Objects for slower,
+                      Objetos para dias mais lentos
                       <br/>
-                      better days.
+                      e melhores.
                     </h3>
-                    <span class="preview__button">VIEW COLLECTION ↗</span>
+                    <span class="preview__button">VER COLEÇÃO ↗</span>
                   </div>
                 )}
               </GlassCard>
@@ -170,28 +168,28 @@ const showcases = [
     <section class="system-note">
       <Container size="xl">
         <div>
-          <span class="system-note__index">04 / FOUNDATION</span>
-          <h2>Built for the work after launch.</h2>
+          <span class="system-note__index">04 / FUNDAÇÃO</span>
+          <h2>Construído para o trabalho após o lançamento.</h2>
         </div>
         <div class="system-note__grid">
           <p>
-            <strong>Content Layer</strong><span
-          >Typed collections for entries, projects, and campaign data.</span
+            <strong>Camada de Conteúdo</strong><span
+          >Coleções tipadas para entradas, projetos e dados de campanha.</span
           >
           </p>
           <p>
-            <strong>Responsive media</strong><span
-          >AVIF-first local imagery with practical fallbacks.</span
+            <strong>Mídia responsiva</strong><span
+          >Imagens locais priorizando AVIF com alternativas práticas.</span
           >
           </p>
           <p>
-            <strong>Accessible glass</strong><span
-          >Focused effects, robust contrast, and transparency preferences.</span
+            <strong>Vidro acessível</strong><span
+          >Efeitos focados, contraste robusto e preferências de transparência.</span
           >
           </p>
           <p>
-            <strong>Minimal runtime</strong><span
-          >Server-rendered pages and native interactions wherever possible.</span
+            <strong>Runtime mínimo</strong><span
+          >Páginas renderizadas no servidor e interações nativas sempre que possível.</span
           >
           </p>
         </div>
@@ -200,15 +198,15 @@ const showcases = [
     
     <section class="home-cta">
       <Container size="xl">
-        <p>Start with a structure. Make the atmosphere yours.</p>
-        <h2>Pick a page and begin.</h2>
+        <p>Comece com uma estrutura. Faça a atmosfera ser sua.</p>
+        <h2>Escolha uma página e comece.</h2>
         <div>
           <Button href={withBase('/blog/')} variant="outline" size="lg"
-          >Read
+          >Ler
           </Button
           >
           <Button href={withBase('/work/')} variant="outline" size="lg"
-          >Show
+          >Mostrar
           </Button
           >
         </div>
