@@ -1,60 +1,37 @@
-# Regras de Negócio do Journal
+# Regras de Negócio do Metis
 
-## Metadados do Post (Frontmatter)
-Todo arquivo `.mdx` em `app/posts` DEVE conter os seguintes metadados em seu cabeçalho (*frontmatter*):
-- `title`: (Obrigatório) Título da matéria.
-- `description`: (Obrigatório) Resumo da matéria, usado nos cards e na página inicial.
-- `date`: (Obrigatório) Data de publicação. DEVE seguir rigorosamente o formato `DD MMM YYYY` (ex: `28 JUL 2026`) para que o sistema consiga interpretá-la corretamente sem gerar erros de *fallback* na biblioteca de datas (`moment`).
-- `author`: (Opcional, Padrão = "The Journal") Autor da matéria. Deve corresponder a um autor cadastrado em `libs/authors.ts`.
-- `readTime`: (Opcional, Padrão = "1 MIN READ") Tempo de leitura estimado.
-- `image`: (Opcional) URL da imagem de capa. Se não fornecida, exibe-se um placeholder genérico.
-- `featured`: (Opcional, booleano) Se verdadeiro (`true`), a matéria será exibida com destaque na página inicial (a primeira que tiver true é escolhida).
-- `topic`: (Opcional, Padrão = "General") A categoria/tópico ao qual a matéria pertence.
+## Metadados e Centralização Global (Site Config)
+Todas as configurações comportamentais da aplicação devem ser centralizadas e injetadas unicamente a partir de `src/site.config.ts`.
+- **Roteamento de Componentes (Feature Flags)**: O engajamento visual dos módulos de blog, portfólio e da própria landing page na barra de navegação global dependem da declaração do estado booleano do dicionário interno `features`. O mesmo mecanismo controla o registro da integração nativa do Astro Sitemap (`features.sitemap`) e mecanismo de busca de conteúdo (`features.search`).
+- **Design Tokens**: A chave `theme.accentColor` deve refletir e alinhar-se perfeitamente com a cor definida no arquivo de token css primário (styles), promovendo a consistência dos metadados da aplicação (que dependem desta cor) com a renderização front-end.
+- **Persistência Estrutural**: Os feeds de atualização (`rss`) assim como os diretórios de conteúdo renderizados da aplicação sempre serão submetidos ao escopo de build da compilação estática independentemente de estarem ou não sendo apresentados na barra de navegação principal.
 
-## Sistema de Autores
-- Todos os autores da plataforma devem estar centralizados no arquivo `libs/authors.ts`.
-- O sistema disponibiliza um diretório de autores em `/authors`.
-- Cada autor possui uma página individual gerada de forma dinâmica em `/author/[slug]`, que filtra e lista todos os posts cuja autoria coincida com o nome dele.
-- Na página individual de um autor, a `Sidebar` substitui o bloco "About" pelo perfil (nome, biografia, foto) do autor correspondente.
-- Nas páginas `/about` e `/authors`, a seção "About" da `Sidebar` é ocultada automaticamente para evitar redundância de informações.
+## Regras de Camada de Conteúdo (Content Config)
+Baseando-se estritamente na engrenagem estrutural das APIs de camadas do Astro 7, as tipagens são validadas na base por **Zod** (`src/content.config.ts`).
+As validações impõem a conformidade total dos seguintes metadados nos cabeçalhos (`Frontmatter`) de seus respectivos diretórios:
 
-## Geração de Tópicos
-O componente lateral (Sidebar) coleta a lista de tópicos dinamicamente:
-- A função lê todos os posts e agrupa pela propriedade `topic`.
-- Apenas tópicos que possuem 1 ou mais posts cadastrados aparecerão na lista lateral.
-- A contagem apresentada ao lado do nome do tópico (ex: "7 issues") reflete o total de matérias publicadas no formato mdx com aquele tópico exato.
+### Regras do Módulo de Blog (`src/content/blog/`)
+Arquivos textuais (`.md` / `.mdx`) da estrutura do blog DEVEM se enquadrar ao seguinte modelo:
+- `title` e `description`: Textos (**obrigatórios**).
+- `pubDate`: Um formato data-conversível para registrar temporalmente as publicações (**obrigatório**).
+- `updatedDate`: Formato variante e de registro de retificação de matéria (opcional).
+- `heroImage`: Parâmetro de capa. Deve ser apontado explicitamente de forma relativa visando o diretório de ativos internos `src/assets/` para passar pelos mecanismos de validação e otimização.
+- Configurações complementares como `author` (fallback = 'Anonymous'), a tag boleana `draft` para omitir artigos de publicações públicas e flags como `featured` possuem `false` por definição nativa. As nomenclaturas `tags` necessitam obrigatoriamente ser matrizes literais em arrays de strings se declaradas.
 
-## Comportamento da Página Inicial
-- O maior post de destaque (`FeaturedPost`) escolhe automaticamente o post mais recente marcado com `featured: true`. Se nenhum post tiver a flag `featured`, o post mais recente no geral será usado.
-- A sessão "MORE ISSUES" carrega os posts restantes (excluindo o principal).
-- A sessão "Features" da barra lateral (Sidebar) apresenta no máximo os 4 posts mais recentes (excluindo o principal).
+### Regras do Módulo de Portfólio (`src/content/projects/`)
+Estudos de casos elaborados em Markdown exigem o suprimento dos seguintes comportamentos:
+- `title`, `summary` (chamada concisa), `tech` (matriz de strings elencando as ferramentas estruturais), `role` (Cargo ou Função exercida), bem como o referencial `year` numérico, são **estritamente obrigatórios**.
+- `cover`: Imagem que funcionará como banner ilustrativo para compor grades no portfólio principal. É **obrigatória** e deve mapear seu endereço em rotas relativas focando em `src/assets/`.
+- Elementos como galerias expansíveis `images`, propriedades de estado do portfólio como `featured` e parâmetros complementares com `links` e `duration` se submetem à formatação de dados opcionais sob demanda no modelo.
 
-## Busca Dinâmica e Navegação por Tópicos
-- **Slugificação de Tópicos**: Para garantir a correspondência precisa entre a URL e o conteúdo, tanto o parâmetro da rota de tópicos quanto o tópico do post são normalizados durante a filtragem (letras minúsculas e espaços convertidos em hífens).
-- **Exibição do Tópico**: Na página de listagem (`/topic/[topic-name]`), o sistema tenta resgatar a grafia e capitalização originais a partir da propriedade `topic` do primeiro post encontrado. Como plano de contingência (*fallback*), os hífens são convertidos em espaços com a primeira letra maiúscula.
-- **Sugestões de Tópicos**: O modal de pesquisa exibe dinamicamente até 10 "badges" únicos de tópicos reais extraídos do repositório de posts caso a pesquisa atual do usuário não retorne correspondências, servindo como uma sugestão rápida de navegação. Ao clicar nessas sugestões, o modal se encerra automaticamente e o usuário é redirecionado para a respectiva página do tópico, evitando "becos sem saída" na navegação.
+### Regras da Landing Page (`src/content/landing/`)
+Todo escopo de informação visual exibida nas rotas de páginas orientadas a conversão (e-commerce/landing) deriva diretamente da indexação de arquivos de serialização em formatos estáticos (`.json`, `.yaml` ou `.yml`).
+- A compilação resgata **sempre e exclusivamente o primeiro registro** processado desta coleção de conteúdo para injetar sobre a estrutura visual do site principal de landing.
+- A configuração da árvore nodal requerida como base operacional para qualquer construto de landing é a `hero`.
+- **Validadores de Hero**: Este bloco não dispensa `title`, `subtitle`, e uma `description`, acrescido mandatoriamente da parametrização do `cta.primary` para ancorar ao CTA principal da página de aterrissagem. O `cta.secondary` pode ser negligenciado.
+- O mapeamento lógico contempla e apoia as coleções de seções `features`, `benefits`, `pricing`, montagem de `gallery`, lista de `testimonials` (de clientes com rating), perguntas frequentes (`faq`) e a macro região orientada a fechamento no bottom-page, definida em `finalCta`.
 
-## Geração de Sitemap (SEO)
-O sistema mantém uma listagem XML padronizada de URLs dinamicamente atualizada para motores de busca:
-- **Rotas Mapeadas**: O sitemap engloba rotas institucionais e principais (ex: a homepage principal com peso máximo, e o índice do `/blog`), adicionadas estaticamente.
-- **Injeção Dinâmica de Postagens**: Todo post convertido de `.mdx` ganha instantaneamente uma entrada correspondente no sitemap sem intervenção manual.
-- **Data de Atualização (`lastModified`)**: A marcação de tempo reflete a data estipulada no *frontmatter* (`date`) de cada post, indicando ao motor de busca o frescor exato do conteúdo. Caso um artigo não exiba data explícita, a data atual do momento de construção é empregada como fallback (baseada no utilitário de formatação central configurado em `resources.ts`).
-- **Indexação Limpa**: O sitemap prioriza o uso estrito do domínio canônico (o `siteUrl`), garantindo que barras extras de concatenação ou domínios inconsistentes não provoquem quebras de link ou duplicidade SEO.
-
-## Formatação Visual dos Posts
-Todos os artigos escritos nos arquivos MDX utilizam o conjunto de regras globais definidas na classe `.markdown-content`. Novas postagens não exigem inclusão de classes embutidas em HTML, devendo utilizar puramente a notação padrão do Markdown (como `#` para títulos, `*` para listas, `> ` para citações, aspas tortas para código, etc), visto que o design system da página cuidará de estilizá-los perfeitamente no momento da renderização.
-
-## Navegação e Compartilhamento de Posts
-- Ao final de cada leitura de post (`/[slug]`), o sistema exibe dinamicamente links para o "Post Anterior" (mais antigo cronologicamente) e "Próximo Post" (mais novo). Essa conta é feita com base na posição do post atual dentro do array gerado por `getPosts()`, que já vem ordenado descrescentemente por data.
-- Se o usuário estiver no post mais antigo, o botão de "Post Anterior" desaparece (e vice-versa para o mais novo).
-- Cada post contém um botão de Compartilhamento. Este botão deve tentar invocar a Web Share API (`navigator.share()`). Em navegadores ou dispositivos não suportados, ele deve atuar como um botão de "Copiar Link", salvando a URL do post na área de transferência (`navigator.clipboard`) e alterando o status visual para "Copiado!" temporariamente por 2 segundos.
-
-## Parâmetros e Configurações Globais (Resources)
-- **Proibição de Hardcode**: Toda configuração estática de sistema (como nome do app, idioma, regras de formatação de datas, contatos e fuso horário) NÃO PODE ser inserida como valor literal (*hardcoded*) diretamente nos componentes React ou funções utilitárias.
-- **Uso Obrigatório**: Estes dados DEVEM obrigatoriamente ser importados e consultados a partir dos objetos globais exportados em `resources/resources.ts`.
-- **Novas Configurações**: Quaisquer novas configurações não-dinâmicas que impactem o projeto como um todo devem ser incluídas nesse mesmo diretório e arquivo para manter a padronização e facilitar futuras manutenções unificadas.
-
-## RSS Feed Automático
-- O arquivo `rss.xml` é mapeado de forma dinâmica. A plataforma disponibiliza o conteúdo mais recente na forma de um feed (RSS 2.0) sem exigir novos *builds* de produção exclusivos.
-- **Sem Intervenção Manual**: Nenhuma intervenção manual é necessária para a atualização deste arquivo XML. Todos os dados da estrutura XML (*title*, *description*, *author* e *date*) são injetados de forma automática em tempo real através do uso das propriedades declaradas em `resources.ts` e do *frontmatter* dos arquivos `.mdx`.
-- **Consistência de Data**: Para efeitos de padronização, a publicação RSS sempre usará a conversão universal UTC oriunda das informações literais de data presentes no cabeçalho das postagens. O sistema de *parsing* (`moment`) é explicitamente configurado para ler as datas no formato exato `DD MMM YYYY` das matérias, garantindo que não haja avisos de depreciação (*deprecation warnings*) ou falhas na conversão da string original.
+## Regras Globais e Acessibilidade
+- **SEO & Distribuição**: Um recurso de feed baseando-se em especificações canônicas padronizadas (RSS) será dinamicamente provido pela rota `/rss.xml`. Para preservar conformidades técnicas, a tag `<language>` nativa de arquivos RSS Feed incorporará a declaração da linguística-matriz definida no metadado base em `site.config.ts`.
+- **Comportamentos Motrizes e Sensoriais**: Atendendo ao rigoroso compliance da acessibilidade (WCAG AA), animações no DOM (Transições css, deslocamentos) ou variações estruturais de textura ("glass/transparency") reverenciam ativamente o perfil e a diretriz estipulada pelo dispositivo matriz, ouvindo os escopos nativos via queries `prefers-reduced-motion` e `prefers-reduced-transparency`.
+- Interações visuais possuem tratamentos de foco declarados (Focus States). O site utiliza âncoras de navegação direta via leitores (`skip nav`) e marcos semânticos (`Landmarks`).

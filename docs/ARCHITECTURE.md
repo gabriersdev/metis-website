@@ -1,52 +1,47 @@
-# Arquitetura do Journal
+# Arquitetura do Metis
 
-O projeto utiliza Next.js com App Router. Os conteúdos das matérias são escritos em formato MDX e processados em Server Components.
+O projeto Metis é baseado no tema `astro-haze`, utilizando o framework Astro 7. Trata-se de um projeto focado em conteúdo estático (Content-first), com um sistema de UI reutilizável fundamentado na estética de *Glassmorphism*. O sistema disponibiliza suporte completo a um blog paginado, portfólio para estudos de caso, e uma página de aterrissagem (landing page).
 
-## Fluxo de Renderização MDX
-1. Os arquivos de conteúdo (matérias) são armazenados em `app/posts/` com a extensão `.mdx`.
-2. O utilitário `libs/mdx.ts` utiliza o pacote `gray-matter` para extrair os meta-dados (*Frontmatter*) e o corpo do texto de cada arquivo.
-3. A página de listagem `app/page.tsx` lê todos os posts, ordena-os por data e exibe resumos em componentes como `FeaturedPost` e `PostCard`.
-4. A página de leitura `app/[slug]/page.tsx` faz o matching dinâmico do *slug* na URL com o nome do arquivo, e usa o `next-mdx-remote` para compilar o conteúdo MDX para HTML.
+## Estrutura de Diretórios e Componentes
 
-## Estrutura de Componentes
-Seguindo o design limpo:
-- `header.tsx`: Navegação principal.
-- `footer.tsx`: Rodapé.
-- `sidebar.tsx`: Coluna lateral da home com tópicos e posts em destaque.
-- `featured-post.tsx`: Post grande da página inicial.
-- `post-card.tsx`: Lista de posts menores.
-- `newsletter.tsx`: Bloco de conversão de emails.
-- `share-button.tsx`: Botão de compartilhamento que utiliza Web Share API ou a área de transferência.
+A organização segue a arquitetura canônica e o roteamento baseado em arquivos do ecossistema Astro, divididos principalmente nos seguintes diretórios dentro de `src/`:
 
-## Estilização
-Utilizamos TailwindCSS. A formatação visual dos conteúdos MDX não utiliza plugins externos como o `@tailwindcss/typography`. Em vez disso, a renderização do MDX é envelopada pela classe `markdown-content` em `app/[slug]/page.tsx`. Todas as definições de tipografia, espaçamento de parágrafos, cores de cabeçalhos, listas, imagens e blocos de código correspondentes a essa classe encontram-se estritamente definidas de forma manual no arquivo global `style/styles.css`, para manter um controle apurado do *design system*.
+- **`components/`**: Contém todos os componentes visuais, divididos por contexto semântico:
+  - `blog/`: Componentes específicos para o blog (cards, paginação, grid de posts e índice/ToC).
+  - `common/`: Componentes globais compartilhados, encarregados do cabeçalho, rodapé, tags de SEO, alternador de tema e elementos decorativos (fundo aurora).
+  - `landing/`: Seções da página de destino orientadas pela configuração de dados (Hero, Features, Pricing, etc).
+  - `portfolio/`: Componentes para exibição de galerias, e listagens de projetos.
+  - `ui/`: Primitivas de UI compartilhadas em todo o app (GlassCard, Button, Picture, Tag, e containers estruturais).
 
-## Pesquisa e Filtros (Modal de Busca)
-- `search-modal.tsx`: Componente utilizando a tag nativa `<dialog>` HTML5.
-  - **Controle de Estado:** A abertura e fechamento são controlados nativamente via métodos de DOM (`showModal()` e `close()`) acessados por meio de um `useRef`. Um event listener nativo monitora o evento `close` da tag `<dialog>` para garantir sincronia bidirecional com o estado React (como fechamentos via tecla `Esc`).
-  - **Otimização:** A lista de tópicos únicos para sugestão é derivada e memoizada com `useMemo`, evitando recálculo de array em iterações de filtro.
-  - **Estilização e Acessibilidade:** A visibilidade é controlada garantindo perfeita acessibilidade e foco. A interface com efeito de desfoque é atingida de forma nativa e semântica através da pseudo-classe `backdrop:` (ex: `backdrop:backdrop-blur-sm`). A listagem permite busca em tempo real nos metadados (*title*, *description* e *topic*).
+- **`content/`**: Sistema de coleções de conteúdo gerenciado pela Content Layer API do Astro:
+  - `blog/`: Base de postagens escritas em Markdown (`.md`) e MDX (`.mdx`).
+  - `landing/`: Modelo de dados dinâmico da página de destino, em formatação de serialização de dados (`.json`, `.yaml` ou `.yml`).
+  - `projects/`: Repositório de arquivos (Markdown/MDX) de estudo de caso para a aba de portfólio.
 
-## Roteamento de Tópicos
-- `app/topic/[topic-name]/page.tsx`: Página de arquivo que lista todos os posts de um tópico específico. Recebe o parâmetro dinâmico da URL de forma assíncrona (Next.js 15+), realiza um processo de "slugificação" para garantir a comparação resiliente entre o nome da URL e os tópicos declarados nos MDXs, e exibe as listagens num formato espelhado à seção principal.
+- **`layouts/`**: Componentes de layout base que envelopam o documento estrutural (HTML).
 
-## Roteamento de Autores
-- `libs/authors.ts`: Configuração centralizada dos autores.
-- `app/authors/page.tsx`: Página que lista todos os autores cadastrados.
-- `app/author/[slug]/page.tsx`: Rota dinâmica (Next.js 15+) que lista os posts específicos de um autor. Reutiliza o componente `Sidebar`, porém injeta os dados do autor (foto, nome e bio) no lugar das informações gerais do "The Journal".
+- **`lib/`**: Ferramentas, bibliotecas utilitárias e gerenciamento de URL.
 
-## Centralização de Recursos (Single Source of Truth)
-- `resources/resources.ts`: Arquivo que atua como a única fonte da verdade para as configurações globais estáticas do sistema (nome do site, URLs, fuso horário, metadados de contato e configurações de formatação).
-- `resources/dictionary.ts`: Arquivo centralizado que armazena todos os pequenos textos (strings) da interface de usuário (UI). Desacopla as *hardcoded strings* dos componentes React, garantindo que o sistema possua infraestrutura nativa e imediata para internacionalização e localização (i18n).
-- **Conteúdos Base em Markdown**: Textos extensos (como os da página *About*, *Privacy* e o guia no rodapé dos posts) foram isolados em arquivos `.md` puros (`about.md`, `privacy.md`, `guide.md`) dentro da pasta `resources`. Diferente dos posts regulares, esses arquivos não possuem metadados (Frontmatter) e são lidos sincronicamente no servidor via módulo nativo `fs` (ex: `fs.readFileSync`), sendo então injetados dinamicamente no componente `MDXRemote`.
-- **Objetivo Arquitetural**: A existência desta pasta e seus respectivos arquivos evita o uso de valores "chumbados" no código. Qualquer alteração de idioma, formatações base, metadados ou páginas estáticas reflete instantaneamente em toda a aplicação sem a necessidade de modificar múltiplos arquivos da interface visual.
+- **`pages/`**: Engrenagem de roteamento:
+  - `blog/`: Índices de navegação, mapeamento para rotas de paginação e processamento das matérias (artigos).
+  - `landing/`: Rota principal de apresentação do produto/e-commerce.
+  - `tags/`: Rotas para arquivamento e filtragem utilizando taxonomias cruzadas.
+  - `work/`: Índice do portfólio, gerando as sub-rotas dinamicamente para os estudos de caso baseados nos conteúdos.
+  - `rss.xml.ts`: Route Handler destinado à geração do XML estático do fluxo RSS.
 
-## Geração Automática de Feeds (RSS)
-- `app/rss.xml/route.ts`: Rota de API (Route Handler) nativa do Next.js responsável por interceptar requisições ao arquivo `rss.xml`.
-- **Dinamicidade**: Lê os conteúdos MDX através de `getPosts()` e os metadados globais em `resources.ts`, gerando o arquivo XML do RSS Feed na versão 2.0 dinamicamente, mantendo o feed sempre atualizado com as novas publicações e dados do autor sem a necessidade de compilação estática manual prévia.
-- **Tratamento de Datas**: O parser de datas (`moment`) recebe um formato de entrada explícito (`DD MMM YYYY`) correspondente aos metadados dos posts para evitar alertas de *fallback* e inconsistências de conversão na engine de build do Next.js.
+- **`styles/`**: Elementos de estilo global que governam o comportamento estético de todo site, dispensando utilitários diretamente no HTML.
 
-## Geração Automática de Sitemap (SEO)
-- `app/sitemap.ts`: Rota especial do ecossistema Next.js (`MetadataRoute.Sitemap`) que intercepta requisições para `sitemap.xml`.
-- **Funcionamento**: A função de renderização coleta programaticamente todas as postagens publicadas através do método `getPosts()` e combina suas URLs (junto a rotas estáticas como a homepage e `/blog`) retornando um objeto iterável estruturado. O Next.js então formata esse retorno nativamente para o padrão XML de SEO utilizado pelos indexadores globais.
-- **Tratamento de Datas**: Assim como na geração de RSS, a extração do `lastModified` especifica explicitamente o formato `DD MMM YYYY` ao transformar a string do arquivo MDX, prevenindo o comportamento padrão instável do construtor de `Date` que gera avisos de *deprecation*.
+## Estilização (Tokens, Glass e Global)
+Diferente de implementações modernas que utilizam frameworks utilitários intensivos (ex: Tailwind), o projeto confia inteiramente no uso de variáveis nativas da Web (CSS Custom Properties) geridas por intermédio do `src/styles/tokens.css`.
+- As superfícies modulares, cards e texturas do estilo *glass* (junto a eventuais comportamentos de degradação suave - fallbacks) encontram-se definidos no arquivo `src/styles/glass.css`.
+- Todos as formatações globais residem no arquivo `src/styles/global.css`.
+- **Comutação de Tema (Light/Dark)**: O controle visual opera de modo sistêmico. Existe proteção embutida para a intermitência visual durante os acessos (*no-flash startup*) e a tag `theme-color` é refletida sincronizadamente com o estado do tema.
+
+## Otimização de Ativos e Compilação
+- **Media**: Imagens hospedadas localmente no diretório de recursos estritos (`src/assets/`) são otimizadas nativamente pela API de imagem do Astro (`astro:assets`) sendo entregues nos formatos AVIF e WebP. Elas são injetadas através do componente `<Picture>`, gerando regras `srcset` dinamicamente responsivas. Referências puras de URL ou ativos do diretório estático aberto (`public/`) são rendidos sem alteração do binário.
+- **Resiliência de Hospedagem**: As chaves âncoras locais do sistema e hyperlinks (como imagens, caminhos de leitura, roteamento) atravessam o interceptador `withBase()` importado de `src/lib/url.ts`. Ele é desenhado para acomodar domínios não raiz. Ex: a sub-rotação no uso do recurso de deploy de repositório em plataformas como `GitHub Pages`.
+
+## Mecanismos de Pesquisa
+- A infraestrutura técnica para a busca instantânea estática é sustentada pelo pacote e integração **Pagefind** (`astro-pagefind`). 
+- Em vez de realizar queries lentas ao servidor, toda a estrutura referencial é montada numa camada binária estática ao se despachar o comando final de build.
+- O componente front-end consiste em um Modal de Vidro (Glass Modal) indexador, que pode ser ativado instantaneamente clicando sobre o botão global pertinente no cabeçalho (Header) ou via combinações de macro (`⌘K`).
